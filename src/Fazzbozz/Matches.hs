@@ -6,17 +6,22 @@ module Fazzbozz.Matches (
 
   FibonacciState(..),
   isFibonacci,
+  checkFibonacci,
   fibs,
+  defaultFibonacciEnv,
   defaultFibonacciState,
 
   HappyState(..),
   isHappy,
+  checkHappy,
+  defaultHappyEnv,
   defaultHappyState,
 
   EnclosedState(..),
   enclose,
 ) where
 
+import Control.Monad.Trans.State
 import Data.List
 import Data.Tuple
 
@@ -41,45 +46,56 @@ instance FazzState PredicateState where
 
 newtype ModuloState = ModuloState Integer deriving (Eq, Show)
 
+divisibleBy :: Integral a => a -> a -> Bool
+a `divisibleBy` b = (a `mod` b) == 0
+
 isModulo :: Integral a => a -> a -> Bool
-isModulo count n = (n `mod` count) == 0
+isModulo = flip divisibleBy
 
 instance FazzState ModuloState where
   matchFazz = constState matchModulo
-    where matchModulo (ModuloState n) = isModulo n
+    where matchModulo (ModuloState n) = (`divisibleBy` n)
 
 -- fibonacci
 
-
-newtype FibonacciState = FibonacciState [Integer] deriving (Eq, Show)
+type FibonacciEnv = [Integer]
 
 isFibonacci :: (Ord a, Num a) => a -> Bool
-isFibonacci = fst . dropElem fibs
-
-dropElem :: Ord a => [a] -> a -> (Bool, [a])
-dropElem ns n
-  | n' == n = (True, rest)
-  | otherwise = (False, ns')
-  where ns'@(n':rest) = dropWhile (<n) ns
+isFibonacci n = evalState (checkFibonacci n) defaultFibonacciEnv
 
 fibs :: Num n => [n]
 fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 
+defaultFibonacciEnv :: Num n => [n]
+defaultFibonacciEnv = fibs
+
+checkFibonacci :: Ord a => a -> State [a] Bool
+checkFibonacci n = do
+  ns <- get
+  let ns'@(n' : _) = dropWhile (<n) ns
+  let match = (n' == n)
+  put ns'
+  return match
+
+-- outgoing "State" wrappers for FibonacciEnv
+
+newtype FibonacciState = FibonacciState FibonacciEnv deriving (Eq, Show)
+
 defaultFibonacciState :: FibonacciState
-defaultFibonacciState = FibonacciState fibs
+defaultFibonacciState = FibonacciState defaultFibonacciEnv
 
 matchFibonacci :: FibonacciState -> Integer -> (Bool, FibonacciState)
-matchFibonacci (FibonacciState s) n = fmap FibonacciState $ dropElem s n
+matchFibonacci (FibonacciState s) n = FibonacciState <$> runState (checkFibonacci n) s
 
 instance FazzState FibonacciState where
   matchFazz = matchFibonacci
 
 -- happy
 
-newtype HappyState = HappyState (Map.Map Integer Bool) deriving (Eq, Show)
+type HappyEnv = Map.Map Integer Bool
 
 isHappy :: Integer -> Bool
-isHappy = fst . matchHappy defaultHappyState
+isHappy n = evalState (checkHappy n) defaultHappyEnv
 
 nextHappy :: Integral a => a -> a
 nextHappy = sum . map square . digits 10
@@ -91,21 +107,30 @@ digits base = unfoldr $ digits' base
     digits' _ 0 = Nothing
     digits' base n = Just . swap $ n `divMod` base
 
+defaultHappyEnv :: HappyEnv
+defaultHappyEnv = Map.fromList [(1, True), (4, False)]
+
+checkHappy :: Integer -> State HappyEnv Bool
+checkHappy n = do
+  oldState <- get
+  let maybeMatch = Map.lookup n oldState
+  case maybeMatch of
+    Just result -> return result
+    Nothing -> do
+      let next = nextHappy n
+      let (result, resultState) = runState (checkHappy next) oldState
+      put $ Map.insert n result resultState
+      return result
+
+-- outgoing "State" wrappers for HappyEnv
+
+newtype HappyState = HappyState HappyEnv deriving (Eq, Show)
+
 defaultHappyState :: HappyState
-defaultHappyState = HappyState $ Map.fromList [(1, True), (4, False)]
+defaultHappyState = HappyState defaultHappyEnv
 
 matchHappy :: HappyState -> Integer -> (Bool, HappyState)
-matchHappy (HappyState s) = fmap HappyState . collectLookup nextHappy s
-
-collectLookup :: Ord a => (a -> a) -> Map.Map a b -> a -> (b, Map.Map a b)
-collectLookup f m val = collectLookup' present m val
-  where
-    present = Map.lookup val m
-    collectLookup' (Just result) m _ = (result, m)
-    collectLookup' Nothing m val = (result, m')
-      where
-        (result, m') = fmap insertVal $ collectLookup f m $ f val
-        insertVal = Map.insert val result
+matchHappy (HappyState s) n = HappyState <$> runState (checkHappy n) s
 
 instance FazzState HappyState where
   matchFazz = matchHappy

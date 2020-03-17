@@ -23,8 +23,8 @@ fibonacciTests = [
 
 fibonacciStateTests = [
     "default" ~: let (FibonacciState f) = defaultFibonacciState in take 5 f ~=? [0, 1, 1, 2, 3],
-    "positive head" ~: FibonacciState [5, 8, 13, 21] `matchFazz` 5 ~=? (True, FibonacciState [8, 13, 21]),
-    "positive body" ~: FibonacciState [5, 8, 13, 21] `matchFazz` 8 ~=? (True, FibonacciState [13, 21]),
+    "positive head" ~: FibonacciState [5, 8, 13, 21] `matchFazz` 5 ~=? (True, FibonacciState [5, 8, 13, 21]),
+    "positive body" ~: FibonacciState [5, 8, 13, 21] `matchFazz` 8 ~=? (True, FibonacciState [8, 13, 21]),
     "negative head" ~: FibonacciState [5, 8, 13, 21] `matchFazz` 4 ~=? (False, FibonacciState [5, 8, 13, 21]),
     "negative body" ~: FibonacciState [5, 8, 13, 21] `matchFazz` 10 ~=? (False, FibonacciState [13, 21])
   ]

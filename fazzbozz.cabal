@@ -21,7 +21,8 @@ library
       base >=4.7 && <5,
       containers,
       optparse-applicative,
-      split
+      split,
+      transformers
   exposed-modules:
       Fazzbozz
       Fazzbozz.Base
@@ -49,6 +50,7 @@ test-suite test-fazzbozz
       containers,
       fazzbozz,
       optparse-applicative,
+      transformers,
       HUnit
   default-language:    Haskell2010
   other-modules:
