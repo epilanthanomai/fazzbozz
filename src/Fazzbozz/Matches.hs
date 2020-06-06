@@ -3,6 +3,8 @@ module Fazzbozz.Matches (
 
   ModuloState(..),
   isModulo,
+  checkModulo,
+  defaultModuloEnv,
 
   FibonacciState(..),
   isFibonacci,
@@ -43,6 +45,12 @@ instance FazzState PredicateState where
     where matchPredicate (PredicateState f) = f
 
 -- modulo
+
+checkModulo :: Integral a => a -> a -> State () Bool
+checkModulo n = return <$> isModulo n
+
+defaultModuloEnv :: ()
+defaultModuloEnv = ()
 
 newtype ModuloState = ModuloState Integer deriving (Eq, Show)
 
