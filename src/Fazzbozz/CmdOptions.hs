@@ -5,10 +5,15 @@ module Fazzbozz.CmdOptions (
     opts
   ) where
 
-import Control.Monad
+import Control.Monad (guard)
 import Data.List.Split (splitOn)
 import Data.Semigroup ((<>))
-import Options.Applicative
+import Options.Applicative (
+    Parser(..), ParserInfo(..),
+    (<**>),
+    auto, header, help, helper, eitherReader, fullDesc, info, long, many,
+    metavar, option, progDesc, short, showDefault, value
+  )
 import Text.Read (readMaybe)
 
 type PatternParser n = [String] -> [MatchSpecifier n]

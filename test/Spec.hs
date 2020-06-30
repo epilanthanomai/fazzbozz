@@ -1,11 +1,11 @@
-import System.Exit
-import Test.HUnit
+import System.Exit (exitFailure, exitSuccess)
+import Test.HUnit ((~:), failures, errors, runTestTT, test)
 
-import TestCmdOptions
-import TestCore
-import TestIntegration
-import TestMatches
-import TestSimple
+import TestCmdOptions (optionsTests)
+import TestCore (fazzbozzCoreTests)
+import TestIntegration (integrationTests)
+import TestMatches (fazzbozzMatchTests)
+import TestSimple (fazzbozzSimpleTests)
 
 suite = test [
     "options" ~: optionsTests,

@@ -1,8 +1,7 @@
 module TestSimple (fazzbozzSimpleTests) where
 
-import Control.Monad
-import Test.HUnit
-import Fazzbozz.Simple
+import Test.HUnit ((~:), (~=?))
+import Fazzbozz.Simple (fazzbozz)
 
 fazzbozzFunctionTests = [
     "no matches" ~: fazzbozz [] 1 ~=? "1",

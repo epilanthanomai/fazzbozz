@@ -3,11 +3,11 @@ module Fazzbozz.Core (
   scanM,
 ) where
 
-import Control.Monad
-import Data.Maybe
+import Control.Monad (foldM, guard)
+import Data.Maybe (fromMaybe)
 import Data.Tuple (swap)
 
-import Fazzbozz.Base
+import Fazzbozz.Base (FazzState(..), mapFst)
 
 type Label = String
 type Labeled s = (Label, s)

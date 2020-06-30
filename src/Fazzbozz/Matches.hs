@@ -21,13 +21,13 @@ module Fazzbozz.Matches (
   enclose,
 ) where
 
-import Control.Monad.Trans.State
-import Data.List
-import Data.Tuple
+import Control.Monad.Trans.State (State(..), evalState, get, put, runState)
+import Data.List (unfoldr)
+import Data.Tuple (swap)
 
 import qualified Data.Map as Map
 
-import Fazzbozz.Base
+import Fazzbozz.Base (FazzState, matchFazz)
 
 -- helpers
 

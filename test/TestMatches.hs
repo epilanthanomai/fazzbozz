@@ -1,10 +1,13 @@
 module TestMatches (fazzbozzMatchTests) where
 
 import qualified Data.Map as Map
-import Test.HUnit
+import Test.HUnit ((~:), (~=?))
 
-import Fazzbozz.Base
-import Fazzbozz.Matches
+import Fazzbozz.Base (matchFazz)
+import Fazzbozz.Matches (
+    FibonacciState(..), HappyState(..), ModuloState(..),
+    defaultFibonacciState, isFibonacci, defaultHappyState, isHappy, isModulo
+  )
 
 moduloTests = [
     "positive" ~: isModulo 3 6 ~=? True,

@@ -1,7 +1,7 @@
 module TestCore (fazzbozzCoreTests) where
 
-import Test.HUnit
-import Fazzbozz.Core
+import Test.HUnit ((~:), (~=?))
+import Fazzbozz.Core (scanM)
 
 scanMTests = [
     "collect" ~: scanM collect [] [1,2,3] ~=? [[1], [1,2], [1,2,3]],

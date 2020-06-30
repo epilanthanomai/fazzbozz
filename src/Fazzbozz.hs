@@ -22,7 +22,11 @@ module Fazzbozz (
   enclose,
 ) where
 
-import Fazzbozz.Base
-import Fazzbozz.Core
-import Fazzbozz.Matches
-import Fazzbozz.Simple
+import Fazzbozz.Base (FazzState(..))
+import Fazzbozz.Core (sfazzbozz, scanM)
+import Fazzbozz.Matches (
+    EnclosedState(..), FibonacciState(..), HappyState(..), ModuloState(..),
+    enclose, fibs, defaultFibonacciState, defaultHappyState, isFibonacci,
+    isHappy, isModulo
+  )
+import Fazzbozz.Simple (fazzbozz, makeState)

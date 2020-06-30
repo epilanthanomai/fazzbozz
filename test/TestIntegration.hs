@@ -1,12 +1,11 @@
 module TestIntegration (integrationTests) where
 
-import Test.HUnit
-import Options.Applicative
+import Test.HUnit ((~:), (~=?))
+import Options.Applicative (defaultPrefs, execParserPure, getParseResult)
 
-import Fazzbozz.CmdOptions
-import Fazzbozz.Core
-import Fazzbozz.Matches
-import Fazzbozz.Simple
+import Fazzbozz.CmdOptions (CmdOptions(..), opts)
+import Fazzbozz.Core (scanM, sfazzbozz)
+import Fazzbozz.Simple (makeState)
 
 parseCmdLine = getParseResult . execParserPure defaultPrefs opts
 fazzbozzForOptions (CmdOptions n matchSpecs) = scanM sfazzbozz states [1..n]

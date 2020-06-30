@@ -1,9 +1,7 @@
-import Data.Maybe
-import Options.Applicative
-import Text.Read
+import Options.Applicative (execParser)
 
-import Fazzbozz
-import Fazzbozz.CmdOptions
+import Fazzbozz (makeState, scanM, sfazzbozz)
+import Fazzbozz.CmdOptions (CmdOptions(..), opts)
 
 main = execParser opts >>= printFazzbozz
 

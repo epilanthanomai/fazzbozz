@@ -3,9 +3,12 @@ module Fazzbozz.Simple (
   makeState,
 ) where
 
-import Fazzbozz.CmdOptions
-import Fazzbozz.Core
-import Fazzbozz.Matches
+import Fazzbozz.CmdOptions (MatchPredicateSpecifier(..))
+import Fazzbozz.Core (sfazzbozz)
+import Fazzbozz.Matches (
+    EnclosedState(..), ModuloState(..), PredicateState(..),
+    defaultFibonacciState, defaultHappyState, enclose
+  )
 
 fazzbozz :: [(String, Integer -> Bool)] -> Integer -> String
 fazzbozz preds = fst . sfazzbozz states
