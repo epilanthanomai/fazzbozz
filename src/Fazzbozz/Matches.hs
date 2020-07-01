@@ -9,6 +9,7 @@ module Fazzbozz.Matches (
   FibonacciState(..),
   isFibonacci,
   checkFibonacci,
+  matchFibonacci,
   fibs,
   defaultFibonacciEnv,
   defaultFibonacciState,
@@ -16,6 +17,7 @@ module Fazzbozz.Matches (
   HappyState(..),
   isHappy,
   checkHappy,
+  matchHappy,
   defaultHappyEnv,
   defaultHappyState,
 

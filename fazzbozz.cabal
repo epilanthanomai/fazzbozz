@@ -38,7 +38,8 @@ executable fazzbozz
   build-depends:
       base >=4.7 && <5,
       fazzbozz,
-      optparse-applicative
+      optparse-applicative,
+      transformers
   default-language:    Haskell2010
 
 test-suite test-fazzbozz

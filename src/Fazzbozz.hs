@@ -1,6 +1,10 @@
 module Fazzbozz (
   fazzbozz,
   sfazzbozz,
+  sfazzbozz',
+
+  checkSpecifier,
+  combineChecks,
 
   FazzState(..),
   scanM,
@@ -20,13 +24,20 @@ module Fazzbozz (
 
   EnclosedState(..),
   enclose,
+
+  CombinedState(..),
+  checkCombined,
+  defaultCombinedState,
 ) where
 
 import Fazzbozz.Base (FazzState(..))
-import Fazzbozz.Core (sfazzbozz, scanM)
+import Fazzbozz.Core (combineChecks, sfazzbozz, sfazzbozz', scanM)
 import Fazzbozz.Matches (
     EnclosedState(..), FibonacciState(..), HappyState(..), ModuloState(..),
     enclose, fibs, defaultFibonacciState, defaultHappyState, isFibonacci,
     isHappy, isModulo
   )
-import Fazzbozz.Simple (fazzbozz, makeState)
+import Fazzbozz.Simple (
+    CombinedState(..), checkCombined, checkSpecifier, defaultCombinedState,
+    fazzbozz, makeState
+  )
